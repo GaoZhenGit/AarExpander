@@ -20,12 +20,12 @@ public class UnzipUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry zipEntry = entries.nextElement();
                 String itemName = zipEntry.getName();
-                if (itemName.endsWith("/")) {
-                    File dir = new File(outputDir, itemName);
-                    dir.mkdirs();
-                    continue;
-                }
                 if (itemName.startsWith(prefix) && itemName.endsWith(suffix)) {
+                    if (itemName.endsWith("/")) {
+                        File dir = new File(outputDir, itemName);
+                        dir.mkdirs();
+                        continue;
+                    }
                     InputStream inputStream = zip.getInputStream(zipEntry);
                     File entryFile = new File(outputDir, itemName);
                     entryFile.getParentFile().mkdirs();
