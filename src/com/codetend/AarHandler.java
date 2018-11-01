@@ -82,7 +82,7 @@ public class AarHandler {
         manifestMerger.process(
                 new File(mOutputDir,"AndroidManifest.xml"),
                 mMainManifestFile,
-                mOtherManifestFile.toArray(new File[2]),
+                mOtherManifestFile.toArray(new File[1]),
                 null, null);
     }
 }
