@@ -12,4 +12,6 @@ public class InnerParam {
     public List<String> aarList;
     @Parameter(names = "-output")
     public String outputDir;
+    @Parameter(names = "-needZip")
+    public boolean needZip = false;
 }
