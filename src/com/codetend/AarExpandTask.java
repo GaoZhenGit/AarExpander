@@ -44,7 +44,7 @@ public class AarExpandTask implements Callable<Boolean> {
     }
 
     private boolean unZip() {
-        return !UnzipUtil.unzip(mAarFile, "", "", mOutputDir).isEmpty();
+        return !ZipUtil.unzip(mAarFile, "", "", mOutputDir).isEmpty();
     }
 
     private boolean unZipJarClasses() {
@@ -66,7 +66,7 @@ public class AarExpandTask implements Callable<Boolean> {
         }
         boolean result = true;
         for (File item : mJarFiles) {
-            result = result && !UnzipUtil.unzip(item, "", "", mTempJarDir).isEmpty();
+            result = result && !ZipUtil.unzip(item, "", "", mTempJarDir).isEmpty();
         }
         return result;
     }
@@ -81,7 +81,7 @@ public class AarExpandTask implements Callable<Boolean> {
             result = result && FileUtil.delete(file);
         }
         File targetJarFile = new File(mOutputDir, mAarFile.getName().replace(".aar", ".jar"));
-        result = result && UnzipUtil.zip(mTempJarDir, targetJarFile, true);
+        result = result && ZipUtil.zip(mTempJarDir, targetJarFile, true);
         result = result && FileUtil.delete(mTempJarDir);
         result = result && FileUtil.move(targetJarFile, new File(mLibsDir, targetJarFile.getName()));
         return result;

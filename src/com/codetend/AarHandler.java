@@ -31,7 +31,7 @@ public class AarHandler {
         for (int i = 0; i < mAarList.size(); i++) {
             String aarItem = mAarList.get(i);
             File aarFile = new File(aarItem);
-            UnzipUtil.unzip(aarFile, "", "", mOutputDir);
+            ZipUtil.unzip(aarFile, "", "", mOutputDir);
             if (!mLibsDir.exists()) {
                 mLibsDir.mkdirs();
             }
@@ -52,7 +52,7 @@ public class AarHandler {
             File[] libFiles = mLibsDir.listFiles();
             if (libFiles != null) {
                 for (File file : libFiles) {
-                    UnzipUtil.unzip(file, "assets/", "", mOutputDir);
+                    ZipUtil.unzip(file, "assets/", "", mOutputDir);
                 }
             }
         }

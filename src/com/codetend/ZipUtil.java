@@ -9,7 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-public class UnzipUtil {
+public class ZipUtil {
     public static List<File> unzip(File zipFile, String prefix, String suffix, File outputDir) {
         List<File> result = new ArrayList<>();
         try {
