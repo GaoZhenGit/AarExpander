@@ -69,6 +69,38 @@ public class ZipUtil {
         }
     }
 
+    public static List<String> removeItems(File zipFile, String prefix, String suffix, File desFile) {
+        List<String> removedFiles = new ArrayList<>();
+        try {
+            ZipFile zip = new ZipFile(zipFile, Charset.forName("utf8"));
+            FileOutputStream fos = new FileOutputStream(desFile);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            Enumeration<? extends ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry zipEntry = entries.nextElement();
+                String itemName = zipEntry.getName();
+                if (!itemName.startsWith(prefix) || !itemName.endsWith(suffix)) {
+                    zos.putNextEntry(zipEntry);
+                    InputStream inputStream = zip.getInputStream(zipEntry);
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = inputStream.read(buffer)) > 0) {
+                        zos.write(buffer, 0, len);
+                    }
+                    zos.flush();
+                    zos.closeEntry();
+                    inputStream.close();
+                    removedFiles.add(itemName);
+                }
+            }
+            zos.close();
+            zip.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return removedFiles;
+    }
+
     private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) {
         try {
             byte[] buf = new byte[8192];
@@ -119,6 +151,8 @@ public class ZipUtil {
     public static void main(String[] args) {
 //        unzip(new File("./gamesdk-framework-shellbase-7.1.5.61.aar"),
 //                "", "", new File("./temp"));
-        zip(new File("D:\\JavaProject\\AarExpander\\temp\\temp-libs"), new File("D:\\JavaProject\\AarExpander\\temp\\abc.zip"), true);
+//        zip(new File("D:\\JavaProject\\AarExpander\\temp\\temp-libs"), new File("D:\\JavaProject\\AarExpander\\temp\\abc.zip"), true);
+        removeItems(new File("D:\\JavaProject\\AarExpander\\gamesdk-framework-shellbase-7.1.5.61.aar"),
+                "assets", "", new File("D:\\JavaProject\\AarExpander\\gamesdk.aar"));
     }
 }

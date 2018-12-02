@@ -9,16 +9,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         InnerParam param = new InnerParam();
-        JCommander.newBuilder()
+        JCommander jCommander =JCommander.newBuilder()
                 .addObject(param)
-                .build()
-                .parse(args);
-        if (param.isHelp) {
-            System.out.println("-aarList main.aar,yyy.aar,zzz.aar -output xxx -needZip");
+                .build();
+        if (args == null|| args.length == 0) {
+            jCommander.usage();
             return;
         } else {
-//            AarHandler aarHandler = new AarHandler(param.aarList, param.outputDir);
-//            aarHandler.handle();
+            jCommander.parse(args);
+        }
+        if (param.isHelp) {
+            jCommander.usage();
+            return;
+        } else {
             File outputDir = new File(param.outputDir);
             FileUtil.delete(outputDir);
             List<File> aarDirs = new ArrayList<>();
@@ -27,7 +30,7 @@ public class Main {
                 File aarFile = new File(aarPath);
                 File aarDir = new File(param.outputDir, aarFile.getName());
                 aarDirs.add(aarDir);
-                AarExpandTask aarExpandTask = new AarExpandTask(aarFile, aarDir);
+                AarExpandTask aarExpandTask = new AarExpandTask(aarFile, aarDir, param.keepJar);
                 threadPool.submit(aarExpandTask);
             }
             threadPool.startWait();
