@@ -15,4 +15,6 @@ public class InnerParam {
     public boolean needZip = false;
     @Parameter(names = "-keepJar", description = "keep the original jar in aar")
     public boolean keepJar = false;
+    @Parameter(names = "-f", description = "clean the output dir")
+    public boolean force = false;
 }

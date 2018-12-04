@@ -23,12 +23,14 @@ public class Main {
             return;
         } else {
             File outputDir = new File(param.outputDir);
-            FileUtil.delete(outputDir);
+            if (param.force) {
+                FileUtil.delete(outputDir);
+            }
             List<File> aarDirs = new ArrayList<>();
             ThreadPoolHandler.Item threadPool = ThreadPoolHandler.create();
             for (String aarPath : param.aarList) {
                 File aarFile = new File(aarPath);
-                File aarDir = new File(param.outputDir, aarFile.getName());
+                File aarDir = new File(param.outputDir, aarFile.getName() + "-dir");
                 aarDirs.add(aarDir);
                 AarExpandTask aarExpandTask = new AarExpandTask(aarFile, aarDir, param.keepJar);
                 threadPool.submit(aarExpandTask);
