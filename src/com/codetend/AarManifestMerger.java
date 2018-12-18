@@ -2,13 +2,14 @@ package com.codetend;
 
 import com.android.manifmerger.IMergerLog;
 import com.android.manifmerger.ManifestMerger;
+import com.codetend.api.IMerge;
 
 import java.io.File;
 import java.util.List;
 
-public class AarMerger {
+public class AarManifestMerger implements IMerge{
     private static final String MANIFEST_FILE_NAME = "AndroidManifest.xml";
-    public static boolean merge(List<File> aarDirList, File outputFile) {
+    public boolean merge(List<File> aarDirList, File outputFile) {
         if (aarDirList.size() < 2) {
             return false;
         }

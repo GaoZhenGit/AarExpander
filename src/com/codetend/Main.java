@@ -1,6 +1,9 @@
 package com.codetend;
 
 import com.beust.jcommander.JCommander;
+import com.codetend.util.FileUtil;
+import com.codetend.util.ThreadPoolHandler;
+import com.codetend.util.ZipUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,9 +26,11 @@ public class Main {
             return;
         } else {
             File outputDir = new File(param.outputDir);
+            // 1.clear the output dir if need
             if (param.force) {
                 FileUtil.delete(outputDir);
             }
+            // 2.unzip all the aar files by using multiple threads.
             List<File> aarDirs = new ArrayList<>();
             ThreadPoolHandler.Item threadPool = ThreadPoolHandler.create();
             for (String aarPath : param.aarList) {
@@ -36,26 +41,32 @@ public class Main {
                 threadPool.submit(aarExpandTask);
             }
             threadPool.startWait();
-            // 用于合并目录，届时删除
+            // 3.create a temp dir and copy all the files in unzip aar dirs, which will be delete after finish.
             File tempOutputDir = new File(param.outputDir, "output");
             tempOutputDir.mkdirs();
             for (File item : aarDirs) {
                 FileUtil.copyDir(item, tempOutputDir);
             }
-            AarMerger.merge(aarDirs, new File(tempOutputDir, "AndroidManifest.xml"));
-            if (param.needZip) {
-                ZipUtil.zip(tempOutputDir, new File(outputDir, outputDir.getName() + ".aar"), true);
-                for (File item : aarDirs) {
-                    FileUtil.delete(item);
-                }
-                FileUtil.delete(tempOutputDir);
-            } else {
-                FileUtil.copyDir(tempOutputDir, outputDir);
-                for (File item : aarDirs) {
-                    FileUtil.delete(item);
-                }
-                FileUtil.delete(tempOutputDir);
-            }
+            // 4.merge AndroidManifest.xml
+            new AarManifestMerger().merge(aarDirs, new File(tempOutputDir, "AndroidManifest.xml"));
+            // 5.R.txt merge
+            new RFileMerger().merge(aarDirs, new File(tempOutputDir, "R.txt"));
+            // 6.assemble the outputs
+//            if (param.needZip) {
+//                // zip the files into a new aar file, and then delete the temp dir.
+//                ZipUtil.zip(tempOutputDir, new File(outputDir, outputDir.getName() + ".aar"), true);
+//                for (File item : aarDirs) {
+//                    FileUtil.delete(item);
+//                }
+//                FileUtil.delete(tempOutputDir);
+//            } else {
+//                // copy the result output files into real output dir, and then delete the temp dir.
+//                FileUtil.copyDir(tempOutputDir, outputDir);
+//                for (File item : aarDirs) {
+//                    FileUtil.delete(item);
+//                }
+//                FileUtil.delete(tempOutputDir);
+//            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.codetend;
+package com.codetend.util;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package com.codetend;
+package com.codetend.util;
 
 import java.util.ArrayList;
 import java.util.List;
