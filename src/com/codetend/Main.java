@@ -52,21 +52,21 @@ public class Main {
             // 5.R.txt merge
             new RFileMerger().merge(aarDirs, new File(tempOutputDir, "R.txt"));
             // 6.assemble the outputs
-//            if (param.needZip) {
-//                // zip the files into a new aar file, and then delete the temp dir.
-//                ZipUtil.zip(tempOutputDir, new File(outputDir, outputDir.getName() + ".aar"), true);
-//                for (File item : aarDirs) {
-//                    FileUtil.delete(item);
-//                }
-//                FileUtil.delete(tempOutputDir);
-//            } else {
-//                // copy the result output files into real output dir, and then delete the temp dir.
-//                FileUtil.copyDir(tempOutputDir, outputDir);
-//                for (File item : aarDirs) {
-//                    FileUtil.delete(item);
-//                }
-//                FileUtil.delete(tempOutputDir);
-//            }
+            if (param.needZip) {
+                // zip the files into a new aar file, and then delete the temp dir.
+                ZipUtil.zip(tempOutputDir, new File(outputDir, outputDir.getName() + ".aar"), true);
+                for (File item : aarDirs) {
+                    FileUtil.delete(item);
+                }
+                FileUtil.delete(tempOutputDir);
+            } else {
+                // copy the result output files into real output dir, and then delete the temp dir.
+                FileUtil.copyDir(tempOutputDir, outputDir);
+                for (File item : aarDirs) {
+                    FileUtil.delete(item);
+                }
+                FileUtil.delete(tempOutputDir);
+            }
         }
     }
 }
